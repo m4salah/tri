@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"strconv"
-	"text/tabwriter"
 )
 
 type Item struct {
@@ -90,7 +89,5 @@ func (i *Item) Label() string {
 }
 
 func (i Item) String() string {
-	w := tabwriter.NewWriter(os.Stdout, 3, 0, 1, ' ', tabwriter.TabIndent)
-	defer w.Flush()
 	return fmt.Sprintln(i.Label() + " " + i.PrettyDone() + "  " + i.PrettyP() + " " + i.Text + "\t")
 }
