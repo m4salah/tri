@@ -9,12 +9,13 @@ import (
 
 	"github.com/m4salah/tri/todo"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var priority int
 
 func addRun(cmd *cobra.Command, args []string) {
-	items, err := todo.ReadItems(datafile)
+	items, err := todo.ReadItems(viper.GetString("datafile"))
 	if err != nil {
 		log.Println("The datafile is not found, we will create new datafile")
 	}
@@ -22,7 +23,7 @@ func addRun(cmd *cobra.Command, args []string) {
 		item := todo.Item{Text: arg, Priority: priority}
 		items = append(items, item)
 	}
-	todo.SaveItems(datafile, items)
+	todo.SaveItems(viper.GetString("datafile"), items)
 	fmt.Println("Saved")
 }
 
