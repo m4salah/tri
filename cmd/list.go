@@ -6,18 +6,25 @@ package cmd
 import (
 	"fmt"
 	"log"
+	"os"
+	"sort"
+	"text/tabwriter"
 
 	"github.com/m4salah/tri/todo"
 	"github.com/spf13/cobra"
 )
 
-func runList(cmd *cobra.Command, args []string) {
+func listRun(cmd *cobra.Command, args []string) {
+	w := tabwriter.NewWriter(os.Stdout, 3, 0, 1, ' ', tabwriter.TabIndent)
+	defer w.Flush()
 	items, err := todo.ReadItems(datafile)
 	if err != nil {
 		log.Printf("%v", err)
 	}
-	for index, item := range items {
-		fmt.Printf("%d. %s\n", index+1, item.Text)
+	sort.Sort(todo.ByPrio(items))
+	fmt.Printf("%#v\n", items)
+	for _, i := range items {
+		fmt.Fprintln(w, i.Label()+i.PrettyP()+"\t"+i.Text)
 	}
 }
 
@@ -25,8 +32,8 @@ func runList(cmd *cobra.Command, args []string) {
 var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List all todo items",
-	Long:  ``,
-	Run:   runList,
+	Long:  `Listing the todo items`,
+	Run:   listRun,
 }
 
 func init() {
