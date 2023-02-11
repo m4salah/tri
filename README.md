@@ -8,6 +8,11 @@ This is my first cli application to explore golang, tri is a cli application tha
 go install github.com/m4salah/tri@latest
 ```
 
+## TODO
+
+- Search 
+- Editing 
+
 
 ## I'm following this resources to do this CLI application
 - https://spf13.com/presentation/building-an-awesome-cli-app-in-go-oscon/
