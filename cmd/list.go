@@ -22,9 +22,8 @@ func listRun(cmd *cobra.Command, args []string) {
 		log.Printf("%v", err)
 	}
 	sort.Sort(todo.ByPrio(items))
-	fmt.Printf("%#v\n", items)
 	for _, i := range items {
-		fmt.Fprintln(w, i.Label()+i.PrettyP()+"\t"+i.Text)
+		fmt.Fprintln(w, i.Label()+"\t"+i.PrettyDone()+"\t"+i.PrettyP()+"\t"+i.Text+"\t")
 	}
 }
 
