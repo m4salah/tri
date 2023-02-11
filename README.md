@@ -10,7 +10,6 @@ go install github.com/m4salah/tri@latest
 
 ## TODO
 
-- Search 
 - Editing 
 
 
