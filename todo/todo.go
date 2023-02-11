@@ -2,8 +2,10 @@ package todo
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"strconv"
+	"text/tabwriter"
 )
 
 type Item struct {
@@ -69,9 +71,9 @@ func (i *Item) SetPriority(pri int) {
 
 func (i *Item) PrettyDone() string {
 	if i.Done {
-		return "X"
+		return "[X]"
 	}
-	return ""
+	return "[ ]"
 }
 
 func (i *Item) PrettyP() string {
@@ -80,9 +82,15 @@ func (i *Item) PrettyP() string {
 	} else if i.Priority == 3 {
 		return "[3]"
 	}
-	return " "
+	return "   "
 }
 
 func (i *Item) Label() string {
 	return strconv.Itoa(i.position) + "."
+}
+
+func (i Item) String() string {
+	w := tabwriter.NewWriter(os.Stdout, 3, 0, 1, ' ', tabwriter.TabIndent)
+	defer w.Flush()
+	return fmt.Sprintln(i.Label() + " " + i.PrettyDone() + "  " + i.PrettyP() + " " + i.Text + "\t")
 }
