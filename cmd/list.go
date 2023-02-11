@@ -25,7 +25,7 @@ func listRun(cmd *cobra.Command, args []string) {
 	defer w.Flush()
 	items, err := todo.ReadItems(viper.GetString("datafile"))
 	if err != nil {
-		log.Printf("%v", err)
+		log.Printf("Error while readin datafile, %v", err)
 	}
 	sort.Sort(todo.ByPrio(items))
 
