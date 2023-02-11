@@ -52,12 +52,13 @@ func init() {
 		log.Println("Unable to detact home directory. Please set data using --datafile flag")
 	}
 	filePath := home + string(os.PathSeparator) + ".tridos.json"
+	configPath := home + string(os.PathSeparator) + ".tri.yml"
 
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	rootCmd.PersistentFlags().StringVar(&datafile, "datafile",
 		filePath,
 		"data file store todos")
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config",
-		"",
-		"config file (default is $HOME/.tri.yml)")
+		configPath,
+		"config file")
 }
