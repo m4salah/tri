@@ -4,10 +4,12 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"fmt"
 	"log"
 	"os"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 	// "github.com/spf13/viper"
 )
 
@@ -33,17 +35,23 @@ func Execute() {
 	}
 }
 
-var datafile string
+var (
+	datafile string
+	cfgFile  string
+)
+
+func initConfig() {
+	viper.SetConfigName(".tri") // name of config file (without extension)
+	viper.AddConfigPath("$HOME")
+	viper.AutomaticEnv()
+
+	if err := viper.ReadInConfig(); err != nil {
+		fmt.Println("Using config file: ", viper.ConfigFileUsed())
+	}
+}
 
 func init() {
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.tri.yaml)")
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
+	cobra.OnInitialize(initConfig)
 	home, err := os.UserHomeDir()
 	if err != nil {
 		log.Println("Unable to detact home directory. Please set data using --datafile flag")
@@ -54,4 +62,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&datafile, "datafile",
 		filePath,
 		"data file store todos")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config",
+		"",
+		"config file (default is $HOME/.tri.yml)")
 }
