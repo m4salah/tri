@@ -11,13 +11,16 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var priority int
+
 func addRun(cmd *cobra.Command, args []string) {
 	items, err := todo.ReadItems(datafile)
 	if err != nil {
 		log.Println("The datafile is not found, we will create new datafile")
 	}
 	for _, arg := range args {
-		items = append(items, todo.Item{Text: arg})
+		item := todo.Item{Text: arg, Priority: priority}
+		items = append(items, item)
 	}
 	todo.SaveItems(datafile, items)
 	fmt.Println("Saved")
@@ -34,6 +37,7 @@ var addCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(addCmd)
 
+	addCmd.Flags().IntVarP(&priority, "priority", "p", 2, "priority of the task accept: 1, 2, 3")
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
