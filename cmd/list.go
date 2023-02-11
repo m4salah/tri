@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"sort"
+	"strings"
 	"text/tabwriter"
 
 	"github.com/m4salah/tri/todo"
@@ -16,8 +17,9 @@ import (
 )
 
 var (
-	doneOpt bool
-	allOpt  bool
+	doneOpt  bool
+	allOpt   bool
+	queryOpt string
 )
 
 func listRun(cmd *cobra.Command, args []string) {
@@ -31,7 +33,14 @@ func listRun(cmd *cobra.Command, args []string) {
 
 	for _, i := range items {
 		if allOpt || i.Done == doneOpt {
-			fmt.Fprintln(w, i.Label()+"\t"+i.PrettyDone()+"\t"+i.PrettyP()+"\t"+i.Text+"\t")
+			if len(queryOpt) > 0 {
+				if strings.Contains(i.Text, queryOpt) {
+					fmt.Println(i)
+				}
+			} else {
+				fmt.Println(i)
+			}
+
 		}
 	}
 }
@@ -48,6 +57,7 @@ func init() {
 	rootCmd.AddCommand(listCmd)
 	listCmd.Flags().BoolVar(&doneOpt, "done", false, "Show 'Done' todos")
 	listCmd.Flags().BoolVar(&allOpt, "all", false, "Show All todos")
+	listCmd.Flags().StringVarP(&queryOpt, "query", "q", "", "Search query")
 
 	// Here you will define your flags and configuration settings.
 
