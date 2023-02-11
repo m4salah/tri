@@ -10,6 +10,7 @@ type Item struct {
 	Text     string
 	Priority int
 	position int
+	Done     bool
 }
 
 type ByPrio []Item
@@ -22,7 +23,13 @@ func (s ByPrio) Swap(i, j int) {
 }
 
 func (s ByPrio) Less(i, j int) bool {
-	return s[i].Priority < s[j].Priority
+	if s[i].Done != s[j].Done {
+		return s[i].Done
+	}
+	if s[i].Priority != s[j].Priority {
+		return s[i].Priority < s[j].Priority
+	}
+	return s[i].position < s[j].position
 }
 
 func SaveItems(filename string, items []Item) error {
@@ -42,7 +49,7 @@ func ReadItems(filename string) ([]Item, error) {
 	if err := json.Unmarshal(b, &items); err != nil {
 		return nil, err
 	}
-	for i, _ := range items {
+	for i := range items {
 		items[i].position = i + 1
 	}
 	return items, nil
@@ -58,6 +65,13 @@ func (i *Item) SetPriority(pri int) {
 		i.Priority = 2
 
 	}
+}
+
+func (i *Item) PrettyDone() string {
+	if i.Done {
+		return "X"
+	}
+	return ""
 }
 
 func (i *Item) PrettyP() string {
